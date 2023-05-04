@@ -1,2 +1,1 @@
-"# firstProject" 
-"# MangaProject" 
+# Descrizione progetto
