@@ -1,0 +1,38 @@
+Capitolo(ID,numeroCapitolo,URL, ID_Volume)
+Capitolo.ID_Volume IR  Volume.ID
+
+Volume(ID,NumeroVolume,ID_Manga)
+Volume.ID_Manga IR  Manga.ID
+
+Manga(ID, Titolo, Descrizione,Copertina,Anno)
+
+Categoria(ID,Titolo)
+
+TipoManga(ID_Manga,ID_Categoria)
+TipoManga.ID_Manga IR  Manga.ID
+TipoManga.ID_Categoria IR  Categoria.ID
+
+Persona(ID,Nome)
+
+Scrive(ID_Autore,ID_Manga)
+Scrive.ID_Autore IR  Persona.ID
+Scrive.ID_Manga IR  Manga.ID
+
+Disegna(ID_Artista,ID_Manga)
+Disegna.ID_Artista IR  Persona.ID
+Disegna.ID_Manga IR  Manga.ID
+
+Utente(ID,nome,cognome,data_Nascita,nickname,email,password)
+
+Preferiti(ID_Utente,ID_Manga)
+Preferiti.ID_Utente IR  Utente.ID
+Preferiti.ID_Manga IR  Manga.ID
+
+
+Letto(ID_Utente,ID_Manga)
+Letto.ID_Utente IR  Utente.ID
+Letto.ID_Manga IR  Manga.ID
+
+Commento(ID,contenuto,voto,ID_Utente,ID_Manga)
+Commento.ID_Utente IR  Utente.ID
+Commento.ID_Manga IR  Manga.ID
