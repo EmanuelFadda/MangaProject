@@ -1,8 +1,5 @@
-Capitolo(ID,numeroCapitolo,URL, ID_Volume)
-Capitolo.ID_Volume IR  Volume.ID
-
-Volume(ID,NumeroVolume,ID_Manga)
-Volume.ID_Manga IR  Manga.ID
+Capitolo(ID,numeroCapitolo,numeroVolume,URL, ID_Manga)
+Capitolo.ID_Volume IR  Manga.ID
 
 Manga(ID, Titolo, Descrizione,Copertina,Anno)
 
