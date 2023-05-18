@@ -29,5 +29,5 @@ Per la registrazione di un utente si necessitano delle seguenti informazioni da 
 - password
 - data di nascita
 
-L'id verrà creato automaticamente dal database , e sarà univoco. Quindi si potranno creare profili anche se hanno lo stesso nickname senza alcun problema. 
+L'id verrà creato automaticamente dal database , e sarà univoco. Non esisteranno utenti con lo stesso nickname. 
 
