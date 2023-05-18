@@ -12,7 +12,6 @@ app.config['MYSQL_DB'] = 'mangarealm'
 mysql = MySQL(app)
 
 
-
 def get_all_genres():
     try:
         cur = mysql.connection.cursor()
@@ -24,6 +23,8 @@ def get_all_genres():
     except Exception as e:
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return []
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -55,8 +56,6 @@ def index():
         return render_template('index.html', manga_data=None, genres=get_all_genres())
 
 
-
-
 def get_manga_by_title(title):
     try:
         cur = mysql.connection.cursor()
@@ -82,6 +81,7 @@ def get_manga_by_title(title):
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return None
 
+
 @app.route('/manga/<title>')
 def manga_details(title):
     manga = get_manga_by_title(title)
@@ -91,5 +91,11 @@ def manga_details(title):
         return render_template('error.html', message='Manga not found')
 
 
+@app.route('/account/<nome_account>')
+def profile(nome_account):
+    x = nome_account
+    return render_template('profile.html', nome_account=x)
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>
+        {% block title %} {% endblock %}
+    </title>
+    <!-- Collegamento ai file CSS di Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Collegamento al file CSS personalizzato -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</head>
+
+
+<body>
+    <nav>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Register</a>
+            </li>
+        </ul>
+        {% block content %}
+
+        {% endblock %}
+    </nav>
+</body>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</html>
