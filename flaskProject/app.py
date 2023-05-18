@@ -48,11 +48,11 @@ def index():
         result = cur.fetchall()
         cur.close()
         if result:
-            return render_template('index.html', manga_data=result, genres=get_all_genres())
+            return render_template('search.html', manga_data=result, genres=get_all_genres())
         else:
-            return render_template('index.html', manga_data=None, genres=get_all_genres())
+            return render_template('search.html', manga_data=None, genres=get_all_genres())
     else:
-        return render_template('index.html', manga_data=None, genres=get_all_genres())
+        return render_template('search.html', manga_data=None, genres=get_all_genres())
 
 
 

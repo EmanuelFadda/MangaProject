@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Manga</title>
+    <!-- Collegamento ai file CSS di Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Collegamento al file CSS personalizzato -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Manga</h1>
+        <form action="/" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" name="search" placeholder="Enter manga title">
+            </div>
+
+              <div class="form-group mx-sm-3 mb-2">
+                <select name="genre" class="form-control">
+                  <option value="">All Genres</option>
+                  {% for genre in genres %}
+                  <option value="{{ genre }}">{{ genre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+
+
+
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div class="search-results">
+            {% if manga_data %}
+                <h2>Search Results</h2>
+                <div class="row">
+                    {% for manga in manga_data %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card mb-4">
+                                <img src="{{ manga[3] }}" alt="Cover Image" class="card-img-top" style="max-height: 400px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ manga[1] }}</h5>
+                                    <div class="genres">
+                                        {{ manga[5] }}
+                                    </div>
+                                    <p class="card-text author-artist">
+                                        <span class="font-weight-bold">Author:</span> {{ manga[6] }}<br>
+                                        <span class="font-weight-bold">Artist:</span> {{ manga[7] }}
+                                    </p>
+                                    <p class="card-text summary fog">{{ manga[2] }}</p>
+                                    <a href="/manga/{{ manga[1] }}" class="btn btn-primary">Inizia a leggerlo</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h2>No results found</h2>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Collegamento ai file JavaScript di Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
