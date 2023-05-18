@@ -12,9 +12,20 @@ app.config['MYSQL_DB'] = 'mangarealm'
 mysql = MySQL(app)
 
 
+
+def get_all_genres():
+    try:
+        cur = mysql.connection.cursor()
+        query = "SELECT titolo FROM categoria;"
+        cur.execute(query)
+        genres = [row[0] for row in cur.fetchall()]
+        cur.close()
+        return genres
+    except Exception as e:
+        print(f"Errore durante l'esecuzione della query: {str(e)}")
+        return []
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     if request.method == 'POST':
         search_query = request.form['search']
         cur = mysql.connection.cursor()
@@ -37,11 +48,13 @@ def index():
         result = cur.fetchall()
         cur.close()
         if result:
-            return render_template('index.html', manga_data=result)
+            return render_template('index.html', manga_data=result, genres=get_all_genres())
         else:
-            return render_template('index.html', manga_data=None)
+            return render_template('index.html', manga_data=None, genres=get_all_genres())
     else:
-        return render_template('index.html', manga_data=None)
+        return render_template('index.html', manga_data=None, genres=get_all_genres())
+
+
 
 
 def get_manga_by_title(title):
@@ -68,7 +81,6 @@ def get_manga_by_title(title):
     except Exception as e:
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return None
-
 
 @app.route('/manga/<title>')
 def manga_details(title):

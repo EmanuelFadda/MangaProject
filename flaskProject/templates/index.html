@@ -20,6 +20,14 @@
                 <input type="text" class="form-control" name="search" placeholder="Enter manga title">
             </div>
 
+              <div class="form-group mx-sm-3 mb-2">
+                <select name="genre" class="form-control">
+                  <option value="">All Genres</option>
+                  {% for genre in genres %}
+                  <option value="{{ genre }}">{{ genre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
 
 
 
