@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>{{ manga[1] }}</title>
+    <!-- Collegamento ai file CSS e JavaScript di Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Collegamento al file CSS personalizzato -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</head>
+<body>
+
+
+    <div class="container">
+        <div class="card">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="{{ manga[3] }}" alt="Cover Image" class="img-fluid cover-image">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ manga[1] }}</h1>
+                        <div class="genres">
+                            <span class="font-weight-bold">Generi:</span>
+                            {% for genre in manga[5].split(', ') %}
+                            <span class="genre">{{ genre }}</span>
+                            {% endfor %}
+                        </div>
+                        <p class="author-artist">
+                            <span class="font-weight-bold">Author:</span> {{ manga[6] }}<br>
+                            <span class="font-weight-bold">Artist:</span> {{ manga[7] }}
+                        </p>
+                        <p class="anno">
+                            <span class="font-weight-bold">Anno di uscita:</span> {{ manga[4]|int }}<br>
+                        </p>
+
+
+                        <span class="font-weight-bold">Trama:</span>
+                        <p class="summary">{{ manga[2] }}</p>
+
+                        <a href="#" class="btn btn-dark mr-1 mt-1">
+                            <i class="fa fa-angle-left" aria-hidden="true"/>
+                             Ultimo capitolo
+                        </a>
+                        <a href="#" class="btn btn-dark mr-1 mt-1">
+                            <i class="fa fa-angle-left" aria-hidden="true"/>
+                             Primo capitolo
+                        </a>
+
+                      <button type="button" class="btn btn-warning" id="favorite-button" onclick="toggleFavorite()">
+                        &#9734; Preferiti
+                      </button>
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <a href="/" class="btn btn-primary">Back to Search</a>
+    </div>
+</body>
+</html>
