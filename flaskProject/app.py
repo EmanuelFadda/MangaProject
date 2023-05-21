@@ -25,12 +25,55 @@ def get_all_genres():
         return []
 
 
+def get_all_authors():
+    try:
+        cur = mysql.connection.cursor()
+        query = """SELECT persona.nome FROM `scrive`
+                    LEFT JOIN persona ON scrive.ID_Autore=persona.ID
+                    GROUP BY persona.nome;"""
+        cur.execute(query)
+        authors = [row[0] for row in cur.fetchall()]
+        cur.close()
+        return authors
+    except Exception as e:
+        print(f"Errore durante l'esecuzione della query: {str(e)}")
+        return []
+
+def get_all_years():
+    try:
+        cur = mysql.connection.cursor()
+        query = """SELECT manga.anno FROM `manga`
+                    GROUP BY manga.anno;"""
+        cur.execute(query)
+        authors = [row[0] for row in cur.fetchall()]
+        cur.close()
+        return authors
+    except Exception as e:
+        print(f"Errore durante l'esecuzione della query: {str(e)}")
+        return []
+
+
+def get_all_artist():
+    try:
+        cur = mysql.connection.cursor()
+        query = """SELECT persona.nome FROM disegna
+                    LEFT JOIN persona ON disegna.ID_Artista=persona.ID
+                    GROUP BY persona.nome;"""
+        cur.execute(query)
+        authors = [row[0] for row in cur.fetchall()]
+        cur.close()
+        return authors
+    except Exception as e:
+        print(f"Errore durante l'esecuzione della query: {str(e)}")
+        return []
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         search_query = request.form['search']
+        genres = request.form.getlist('genres[]')
+
         cur = mysql.connection.cursor()
-        # Esegui la query di ricerca dei manga
         query = """
             SELECT m.*, GROUP_CONCAT(DISTINCT c.titolo SEPARATOR ', ') AS Genres,
                     GROUP_CONCAT(DISTINCT aut.nome SEPARATOR ', ') AS Authors,
@@ -42,18 +85,22 @@ def index():
             LEFT JOIN persona aut ON s.ID_Autore = aut.ID
             LEFT JOIN disegna d ON m.ID = d.ID_Manga
             LEFT JOIN persona art ON d.ID_Artista = art.ID
-            WHERE m.titolo LIKE %s
+            WHERE (m.titolo LIKE %s OR c.titolo IN (%s))
             GROUP BY m.titolo;
             """
-        cur.execute(query, ('%' + search_query + '%',))
+
+        cur.execute(query, ('%' + search_query + '%', ', '.join(genres)))
         result = cur.fetchall()
         cur.close()
+
         if result:
-            return render_template('search.html', manga_data=result, genres=get_all_genres())
+            return render_template('index.html', manga_data=result, genres=get_all_genres(),authors=get_all_authors(),artists=get_all_artist(),years=get_all_years())
         else:
-            return render_template('search.html', manga_data=None, genres=get_all_genres())
+            return render_template('index.html', manga_data=None, genres=get_all_genres(),authors=get_all_authors(),artists=get_all_artist(),years=get_all_years())
     else:
-        return render_template('search.html', manga_data=None, genres=get_all_genres())
+        return render_template('index.html', manga_data=None, genres=get_all_genres(),authors=get_all_authors(),artists=get_all_artist(),years=get_all_years())
+
+
 
 
 def get_manga_by_title(title):

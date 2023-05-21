@@ -51,32 +51,6 @@ h1 {
     background-color: #ddd;
 }
 
-.card {
-    max-width: 300px;
-    margin-bottom: 20px;
-}
-
-.card-img-top {
-    max-height: 400px;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.card-title {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.genres {
-    margin-bottom: 10px;
-}
-
-.author-artist {
-    margin-bottom: 10px;
-}
-
 .card-text.summary {
     overflow: hidden;
     position: relative;
@@ -98,20 +72,7 @@ h1 {
 .card-text.summary.expand {
     max-height: none; /* Altezza massima per visualizzare tutto il testo */
 }
-
 .navbar-brand .logo {
-    max-height: 50px;
-    margin-right: 10px;
-}
-.navbar-toggler {
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    padding: 0;
-    cursor: pointer;
-}
-
-.navbar-toggler:focus {
-    outline: none;
-}
+            max-height: 50px;
+            margin-right: 10px;
+        }
