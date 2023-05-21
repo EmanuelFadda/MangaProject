@@ -51,7 +51,7 @@
                 <select name="genre" class="form-control">
                     <option value="">All Genres</option>
                     {% for genre in genres %}
-                    <option value="{{ genre }}">{{ genre }}</option>
+                    <option value="{{ genre[0] }}">{{ genre[1] }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -59,8 +59,8 @@
             <div class="form-group mx-sm-3 mb-2">
                 <select name="author" class="form-control">
                     <option value="">All Authors</option>
-                    {% for author in authors %}
-                    <option value="{{ author }}">{{ author }}</option>
+                    {% for author in people %}
+                    <option value="{{ author[0] }}">{{ author[1] }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -70,8 +70,8 @@
             <div class="form-group mx-sm-3 mb-2">
                 <select name="artist" class="form-control">
                     <option value="">All Artists</option>
-                    {% for artist in artists %}
-                    <option value="{{ artist }}">{{ artist }}</option>
+                    {% for artist in people %}
+                    <option value="{{ artist[0] }}">{{ artist[1] }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -79,7 +79,7 @@
             <div class="form-group mx-sm-3 mb-2">
                 <select name="year" class="form-control">
                     <option value="">All Years</option>
-                    {% for year in years %}
+                    {% for year in range(1950,2022) %}
                     <option value="{{ year }}">{{ year }}</option>
                     {% endfor %}
                 </select>
@@ -113,7 +113,7 @@
                                         <span class="font-weight-bold">Artist:</span> {{ manga[7] }}
                                     </p>
                                     <p class="card-text summary fog">{{ manga[2] }}</p>
-                                    <a href="/manga/{{ manga[1] }}" class="btn btn-primary">Inizia a leggerlo</a>
+                                    <a href="/manga/{{ manga[0] }}" class="btn btn-primary">Inizia a leggerlo</a>
                                 </div>
                             </div>
                         </div>
