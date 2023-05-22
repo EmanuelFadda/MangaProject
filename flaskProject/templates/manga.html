@@ -40,11 +40,11 @@
                         <span class="font-weight-bold">Trama:</span>
                         <p class="summary">{{ manga[2] }}</p>
 
-                        <a href="/manga/{{ manga[0] }}/capitolo/{{ capitoli[-1][1] }}" class="btn btn-dark mr-1 mt-1">
+                        <a href="/manga/{{ manga[0] }}/capitolo/{{ chapters[-1][1] }}" class="btn btn-dark mr-1 mt-1">
                             <i class="fa fa-angle-left" aria-hidden="true"/>
                              Ultimo capitolo
                         </a>
-                        <a href="/manga/{{ manga[0] }}/capitolo/{{ capitoli[0][1] }}" class="btn btn-dark mr-1 mt-1">
+                        <a href="/manga/{{ manga[0] }}/capitolo/{{ chapters[0][1] }}" class="btn btn-dark mr-1 mt-1">
                             <i class="fa fa-angle-left" aria-hidden="true"/>
                              Primo capitolo
                         </a>
@@ -64,8 +64,18 @@
 
         </div>
         <a href="/" class="btn btn-primary">Back to Search</a>
-        <div id="capitoli">
-            {% for chap in capitoli %}
+        <div id="Commenti" style=" border: 2px rgb(0, 0, 0) solid; margin: 2px;">
+            <h3>Commenti</h3>
+            {% for commento in comments %}
+                <div class="commento" style=" border: 2px rgb(6, 248, 248) solid; margin: 2px;">
+                    <a href="/profile/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
+                    <p>{{ commento[1] }} </p>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="capitoli" style=" border: 2px rgb(255, 0, 0) solid; margin: 2px;">
+            <h3>Capitolo</h3>
+            {% for chap in chapters %}
                 <a href="/manga/{{ manga[0] }}/capitolo/{{ chap[1] }}">capitolo {{ chap[1] }}</a><br>
             {% endfor %}
         </div>

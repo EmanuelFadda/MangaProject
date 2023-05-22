@@ -13,6 +13,98 @@ mysql = MySQL(app)
 
 MANGA_FOR_PAGE=18
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        result=None
+        if len(request.form)==1:
+            titolo = request.form['search']
+            ids=get_ids_for_page(title=titolo)
+            result=get_manga_by_list_id(tuple(ids))
+            
+        else:
+            genre=request.form['genre']
+            author=request.form['author']
+            artist=request.form['artist']
+            year=request.form['year']
+            ids=get_ids_for_page(genre=genre,author=author,artist=artist,year=year)
+            result=get_manga_by_list_id(tuple(ids))
+        if result:
+            return render_template('index.html', manga_data=result, genres=get_all_genres(),people=get_all_person())
+        else:
+            return render_template('index.html', manga_data=None, genres=get_all_genres(),people=get_all_person())
+    else:
+        return render_template('index.html', manga_data=None, genres=get_all_genres(),people=get_all_person())
+
+
+@app.route('/manga/<int:id>')
+def manga_details(id):
+    manga = get_manga_by_list_id((id,))[0]
+    id_manga=manga[0]
+
+    #recupero capitoli del manga
+    chapters=get_chapters_by_manga_id(id)
+    
+    #recupero commenti del manga
+    comments=get_comments_by_manga_id(id)
+
+    if manga:
+        return render_template('manga.html', manga=manga,chapters=chapters,comments=comments)
+    else:
+        return render_template('error.html', message='Manga not found')
+
+
+@app.route('/account/<nome_account>')
+def profile(nome_account):
+    x = nome_account
+    return render_template('profile.html', nome_account=x)
+
+
+@app.route('/manga/<int:idm>/capitolo/<int:nc>')
+def capitolo(idm,nc):
+
+    #richiesta capitoli dal database
+    
+    chapters=get_chapters_by_manga_id(idm)
+
+    #ricerca del capitolo
+    chap=chapters[0]
+    for c in chapters:
+        
+        if c[1]==nc:
+            chap=c
+            break
+        
+
+    #url delle immagini
+    url=chap[3]
+    extension=url[-3:]
+    start_url=url[:-5]
+    pages=1
+
+    #calcolo numero di immagini
+    imgs=[]     
+    #controllo tipo dell'immagini
+    while exists(start_url+str(pages)+"."+extension):
+        imgs.append(start_url+str(pages)+"."+extension)
+        pages+=1
+
+    if extension=="jpg":
+        extension="png"
+    else:
+        extension="jpg"
+
+    while exists(start_url+str(pages)+"."+extension):
+        imgs.append(start_url+str(pages)+"."+extension)
+        pages+=1
+    return render_template('capitolo.html', imgs=imgs, chapters=chapters, chp=nc)
+
+
+def exists(path):
+    r = requests.head(path)
+    return r.status_code == requests.codes.ok
+
+
 def get_all_genres():
     try:
         cur = mysql.connection.cursor()
@@ -38,29 +130,31 @@ def get_all_person():
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return []
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        result=None
-        if len(request.form)==1:
-            titolo = request.form['search']
-            ids=get_ids_for_page(title=titolo)
-            result=get_manga_by_list_id(tuple(ids))
-            
-        else:
-            genre=request.form['genre']
-            author=request.form['author']
-            artist=request.form['artist']
-            year=request.form['year']
-            ids=get_ids_for_page(genre=genre,author=author,artist=artist,year=year)
-            result=get_manga_by_list_id(tuple(ids))
-        if result:
-            return render_template('index.html', manga_data=result, genres=get_all_genres(),people=get_all_person())
-        else:
-            return render_template('index.html', manga_data=None, genres=get_all_genres(),people=get_all_person())
-    else:
-        return render_template('index.html', manga_data=None, genres=get_all_genres(),people=get_all_person())
 
+def get_chapters_by_manga_id(id):
+    cur = mysql.connection.cursor()
+    query = """
+            SELECT capitolo.*
+            FROM capitolo
+            WHERE ID_Manga=%s
+            ORDER BY numeroVolume,numeroCapitolo ASC
+            """
+    cur.execute(query, (id,))
+    chapters=cur.fetchall()
+    return chapters
+
+
+def get_comments_by_manga_id(id):
+    cur = mysql.connection.cursor()
+    query = """
+            SELECT commento.*, utente.ID, utente.nickname
+            FROM commento
+            JOIN utente ON commento.ID_Utente=utente.ID
+            WHERE ID_Manga=%s
+            """
+    cur.execute(query, (id,))
+    chapters=cur.fetchall()
+    return chapters
 
 
 def get_ids_for_page(title="",genre="",author="",artist="",year="",page=1):
@@ -108,6 +202,7 @@ def get_ids_for_page(title="",genre="",author="",artist="",year="",page=1):
         ids.append(manga[0])
     return tuple(ids)
 
+
 def get_manga_by_list_id(ids):
     try:
         cur = mysql.connection.cursor()
@@ -137,95 +232,6 @@ def get_manga_by_list_id(ids):
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return None
 
-
-@app.route('/manga/<int:id>')
-def manga_details(id):
-    manga = get_manga_by_list_id((id,))[0]
-    id_manga=manga[0]
-
-    #recupero capitoli del manga
-    cur = mysql.connection.cursor()
-    query="SELECT * FROM capitolo  WHERE capitolo.ID_Manga=%s order by numeroVolume,numeroCapitolo ASC"
-    cur.execute(query,(id_manga,))
-    capitoli=cur.fetchall()
-    
-    if manga:
-        return render_template('manga.html', manga=manga,capitoli=capitoli)
-    else:
-        return render_template('error.html', message='Manga not found')
-
-
-
-
-@app.route('/account/<nome_account>')
-def profile(nome_account):
-    x = nome_account
-    return render_template('profile.html', nome_account=x)
-
-
-@app.route('/manga/<int:idm>/capitolo/<int:nc>')
-def capitolo(idm,nc):
-
-    #richiesta capitoli dal database
-    cur = mysql.connection.cursor()
-    query = """
-            SELECT capitolo.*
-            FROM capitolo
-            WHERE ID_Manga=%s
-            ORDER BY numeroVolume,numeroCapitolo ASC
-            """
-    cur.execute(query, (idm,))
-    chaps=cur.fetchall()
-    counter=1
-
-    num_chps=len(chaps)
-    next_chp=True
-    prev_chp=True
-    #ricerca del capitolo
-    chap=chaps[0]
-    for c in chaps:
-        
-        if c[1]==nc:
-            chap=c
-
-            #controllo presenza capitolo precedente
-            if counter==1:
-                prev_chp=False
-
-            #controllo presenza capitolo successivo
-            if counter==num_chps:
-                next_chp=False
-            break
-        counter+=1
-
-    #url delle immagini
-    url=chap[3]
-    extension=url[-3:]
-    start_url=url[:-5]
-    pages=1
-
-    #calcolo numero di immagini
-    imgs=[]     
-    #controllo tipo dell'immagini
-    while exists(start_url+str(pages)+"."+extension):
-        imgs.append([pages,extension])
-        pages+=1
-
-    if extension=="jpg":
-        extension="png"
-    else:
-        extension="jpg"
-
-    while exists(start_url+str(pages)+"."+extension):
-        imgs.append([pages,extension])
-        pages+=1
-    return render_template('capitolo.html',url=start_url, pages=pages, imgs=imgs, chaps=chaps, chp=nc, next_chp=next_chp, prev_chp=prev_chp)
-
-
-def exists(path):
-    r = requests.head(path)
-    return r.status_code == requests.codes.ok
-  
 
 if __name__ == '__main__':
     app.run(debug=True)

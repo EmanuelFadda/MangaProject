@@ -7,7 +7,7 @@
 </head>
 <body>
     <select onchange="location = this.value;">
-        {% for chap in chaps %}
+        {% for chap in chapters %}
             {% if chap[1]==chp %}
                 <option selected value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }} </option>
             {% else %}
@@ -16,18 +16,18 @@
         {% endfor %}   
     </select>    
     <!-- controllo è aggiunta del bottone per il capitolo precendente (se esiste) -->
-    {% if chaps[0][1]!=chp %}
-        <a href="/manga/{{ chaps[0][-1] }}/capitolo/{{ chp-1 }}"> Capitolo Precedente</a>
+    {% if chapters[0][1]!=chp %}
+        <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp-1 }}"> Capitolo Precedente</a>
     {% endif %}
 
     <!-- controllo è aggiunta del bottone per il capitolo successivo (se esiste) -->
-    {% if chaps[-1][1]!=chp %}
-        <a href="/manga/{{ chaps[0][-1] }}/capitolo/{{ chp+1 }}"> Capitolo successivo</a>
+    {% if chapters[-1][1]!=chp %}
+        <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp+1 }}"> Capitolo successivo</a>
     {% endif %}
 
     <!-- inserimento immagini all'interno della pagina -->
     {% for img in imgs %}
-        <img src="{{ url }}{{ img[0] }}.{{ img[1] }}">
+        <img src="{{ img }}">
     {% endfor %}
 </body>
 </html>
