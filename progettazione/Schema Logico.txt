@@ -19,7 +19,7 @@ Disegna(ID_Artista,ID_Manga)
 Disegna.ID_Artista IR  Persona.ID
 Disegna.ID_Manga IR  Manga.ID
 
-Utente(ID,nome,cognome,data_Nascita,nickname,email,password)
+Utente(ID,nome,cognome,data_Nascita,nickname,email,password,admin)
 
 Preferiti(ID_Utente,ID_Manga)
 Preferiti.ID_Utente IR  Utente.ID
@@ -30,6 +30,6 @@ Letto(ID_Utente,ID_Manga)
 Letto.ID_Utente IR  Utente.ID
 Letto.ID_Manga IR  Manga.ID
 
-Commento(ID,contenuto,voto,ID_Utente,ID_Manga)
+Commento(ID,contenuto,ID_Utente,ID_Manga)
 Commento.ID_Utente IR  Utente.ID
 Commento.ID_Manga IR  Manga.ID
