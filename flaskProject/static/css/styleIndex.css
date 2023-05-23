@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.manga-info {
+    margin-bottom: 20px;
+}
+
+.manga-info h2 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.manga-info p {
+    margin: 0;
+}
+
+.chapter-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chapter-list li {
+    margin-bottom: 10px;
+}
+
+.chapter-list a {
+    display: block;
+    padding: 10px;
+    background-color: #f2f2f2;
+    text-decoration: none;
+    color: #333;
+}
+
+.chapter-list a:hover {
+    background-color: #ddd;
+}
+
+.card {
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.card-img-top {
+    max-height: 400px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.genres {
+    margin-bottom: 10px;
+}
+
+.author-artist {
+    margin-bottom: 10px;
+}
+
+.card-text.summary {
+    overflow: hidden;
+    position: relative;
+    line-height: 1.2em;
+    max-height: 3.6em; /* Altezza massima iniziale, equivalente a 3 righe di testo */
+}
+
+.card-text.summary::after {
+    content: "";
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 1.2em;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}

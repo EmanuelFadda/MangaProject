@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-<head>
-    <title>{{ manga[1] }}</title>
-    <!-- Collegamento ai file CSS e JavaScript di Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Collegamento al file CSS personalizzato -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleManga.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+{% extends "base.html" %}
 
-</head>
-<body>
+{% block pagetitle %}
+{{ manga[1] }}
+{% endblock %}
 
+{% block cssjs %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleManga.css') }}">
+{% endblock %}
 
+{% block content %}
     <div class="container">
         <div class="card">
             <div class="row no-gutters">
@@ -80,5 +77,4 @@
             {% endfor %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

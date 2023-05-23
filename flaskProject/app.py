@@ -49,15 +49,15 @@ def manga_details(id):
     comments=get_comments_by_manga_id(id)
 
     if manga:
-        return render_template('manga.html', manga=manga,chapters=chapters,comments=comments)
+        return render_template('manga.html',genres=get_all_genres(),people=get_all_person(), manga=manga,chapters=chapters,comments=comments)
     else:
-        return render_template('error.html', message='Manga not found')
+        return render_template('error.html',genres=get_all_genres(),people=get_all_person(), message='Manga not found')
 
 
 @app.route('/account/<nome_account>')
 def profile(nome_account):
     x = nome_account
-    return render_template('profile.html', nome_account=x)
+    return render_template('profile.html', genres=get_all_genres(),people=get_all_person(),nome_account=x)
 
 
 @app.route('/manga/<int:idm>/capitolo/<int:nc>')
@@ -97,7 +97,7 @@ def capitolo(idm,nc):
     while exists(start_url+str(pages)+"."+extension):
         imgs.append(start_url+str(pages)+"."+extension)
         pages+=1
-    return render_template('capitolo.html', imgs=imgs, chapters=chapters, chp=nc)
+    return render_template('capitolo.html',genres=get_all_genres(),people=get_all_person(), imgs=imgs, chapters=chapters, chp=nc)
 
 
 def exists(path):

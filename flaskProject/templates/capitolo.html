@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MangaRealm</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block pagetitle %}
+capitolo {{ chp }}
+{% endblock %}
+
+{% block cssjs %}
+
+
+{% endblock %}
+
+{% block content %}
     <select onchange="location = this.value;">
         {% for chap in chapters %}
             {% if chap[1]==chp %}
@@ -29,5 +33,5 @@
     {% for img in imgs %}
         <img src="{{ img }}">
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}
