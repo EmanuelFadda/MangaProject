@@ -1,3 +1,20 @@
+from flask import Flask
+from flask_mysqldb import MySQL
+import requests
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'mangarealm'
+
+mysql = MySQL(app)
+
+MANGA_FOR_PAGE = 18
+
+
 def exists(path):
     r = requests.head(path)
     return r.status_code == requests.codes.ok
