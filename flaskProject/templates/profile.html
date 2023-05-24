@@ -1,12 +1,97 @@
-{% extends 'navbar.html' %}
+{% extends "base.html" %}
 
-{% block title %} profilo {{nome_account}} {% endblock %}
+{% block pagetitle %}
+{{utente.id}} - {{utente.nickname}}
+{% endblock %}
+
+{% block cssjs %}{% endblock %}
 
 {% block content %}
-
-
 <div>
-    ygvvuygvu
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="" alt="immagine profilo">
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Nome: {{utente.nome}}</h6>
+                            </div>
+                            <div class="col">
+                                <h6>Cognome: {{utente.cognome}}</h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h6>id: {{utente.id}}</h6>
+                            </div>
+                            <div class="col">
+                                <h6>email: {{utente.email}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="container">
+                <div id="manga_visti" class="row">
+                    <!--  
+                        manga_object = {
+                            "id": id_manga,
+                            "titolo": titolo,
+                            "copertina": copertina,
+                            "descrizione": descrizione,
+                            "anno": anno
+                        }
+                    -->
+                    <!-- problemi con jQuery-->
+                    {% for manga in utente.manga_visti %}
+                    <div class="col">
+                        <div class="speakers xs-mb30">
+                            <div class="spk-img">
+                                <img class="img-fluid" src="{{manga.copertina}}" alt="{{manga.copertina}}" />
+                            </div>
+                            <div class="spk-info">
+                                <h3>{{manga.titolo}}</h3>
+                                <p>{{manga.descrizione}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <hr>
+
+                <div id="manga_piaciuti" class="row">
+                    <!--  
+                    manga_object = {
+                        "id": id_manga,
+                        "titolo": titolo,
+                        "copertina": copertina,
+                        "descrizione": descrizione,
+                        "anno": anno
+                    }
+                -->
+                    {% for manga in utente.manga_piaciuti %}
+                    <div class="col">
+                        <div class="speakers xs-mb30">
+                            <div class="spk-img">
+                                <img class="img-fluid" src="{{manga.copertina}}" alt="{{manga.copertina}}" />
+                            </div>
+                            <div class="spk-info">
+                                <h3>{{manga.titolo}}</h3>
+                                <p>{{manga.descrizione}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
