@@ -134,7 +134,7 @@ def capitolo(idm, nc):
     while script.exists(start_url+str(pages)+"."+extension):
         imgs.append(start_url+str(pages)+"."+extension)
         pages += 1
-    return render_template('capitolo.html', genres=script.get_all_genres(), people=script.get_all_person(), imgs=imgs, chapters=chapters, chp=nc)
+    return render_template('capitolo.html', genres=script.get_all_genres(), people=script.get_all_person(), imgs=imgs, chapters=chapters, chp=nc, idm=idm)
 
 
 if __name__ == '__main__':

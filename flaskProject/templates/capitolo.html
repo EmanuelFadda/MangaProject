@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block pagetitle %}
-capitolo {{ chp }}
+{{idm}} - chapter {{ chp }}
 {% endblock %}
 
 {% block cssjs %}
@@ -10,28 +10,50 @@ capitolo {{ chp }}
 {% endblock %}
 
 {% block content %}
-    <select onchange="location = this.value;">
-        {% for chap in chapters %}
-            {% if chap[1]==chp %}
-                <option selected value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }} </option>
-            {% else %}
-                <option value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }} </option>
+<div>
+    <div class="container my-3">
+        <div class="row text-center">
+            {% if chapters[0][1]!=chp %}
+            <div class="col-sm">
+                <!-- controllo è aggiunta del bottone per il capitolo precendente (se esiste) -->
+                <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp-1 }}">
+                    Capitolo Precedente
+                </a>
+            </div>
             {% endif %}
-        {% endfor %}   
-    </select>    
-    <!-- controllo è aggiunta del bottone per il capitolo precendente (se esiste) -->
-    {% if chapters[0][1]!=chp %}
-        <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp-1 }}"> Capitolo Precedente</a>
-    {% endif %}
+            <div class="col-sm">
+                <select onchange="location = this.value;">
+                    {% for chap in chapters %}
+                    {% if chap[1]==chp %}
+                    <option selected value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }}
+                    </option>
+                    {% else %}
+                    <option value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }} </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            {% if chapters[-1][1]!=chp %}
+            <div class="col-sm">
+                <!-- controllo è aggiunta del bottone per il capitolo successivo (se esiste) -->
+                <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp+1 }}"> Capitolo successivo</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <!-- inserimento immagini all'interno della pagina -->
+        <div class="">
+            {% for img in imgs %}
+            <div class="text-center">
+                <img width="500px" alt="image not found" src="{{ img }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-    <!-- controllo è aggiunta del bottone per il capitolo successivo (se esiste) -->
-    {% if chapters[-1][1]!=chp %}
-        <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp+1 }}"> Capitolo successivo</a>
-    {% endif %}
 
-    <!-- inserimento immagini all'interno della pagina -->
-    {% for img in imgs %}
-        <img src="{{ img }}">
-    {% endfor %}
 
 {% endblock %}
