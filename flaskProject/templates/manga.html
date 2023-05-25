@@ -76,5 +76,14 @@
                 <a href="/manga/{{ manga[0] }}/capitolo/{{ chap[1] }}">capitolo {{ chap[1] }}</a><br>
             {% endfor %}
         </div>
+        <div style=" border: 2px rgb(0, 252, 168) solid; margin: 2px;">
+            <h1>Consigli</h1>
+            <button id ="advice" value="{{ manga[1] }}" onclick="consigliami()">Consiglio</button>
+            <div id="testo-consiglio">
+    
+            </div>
+            <script src="{{ url_for('static', filename='chat.js') }}"></script>
+        </div>
     </div>
+    
 {% endblock %}
