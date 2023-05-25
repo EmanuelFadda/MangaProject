@@ -18,12 +18,10 @@ Nella pagina del profilo saranno presenti
 - codice identificativo (ID)
 - cronologia manga visti
 - manga piaciuti
-- immagine profilo
 - nome e cognome 
 
 Per la registrazione di un utente si necessitano delle seguenti informazioni da inserire nel form:
 - nickname
-- immagine profilo (si potrà aggiungere un immagine successivamente)
 - nome e cognome 
 - email
 - password
