@@ -57,9 +57,12 @@ def manga_details(id):
         return render_template('error.html', genres=script.get_all_genres(), people=script.get_all_person(), message='Manga not found')
 
 
-@app.route('/account/<nickname_account>')
-def profile(nickname_account):
+@app.route('/account/<id_account>')
+def profile(id_account):
     # aggiungere controllo se non esiste l'account
+
+    manga_visti = script.get_viewed_manga(id_account)
+    manga_piaciuti = script.get_favorite_manga(id_account)
     id_manga = 12
     titolo = "titolo"
     copertina = "url_copertina"
@@ -77,20 +80,15 @@ def profile(nickname_account):
     # funzione per controllare l'esistenza dell'account
     # funzione per trovare tutti i manga visti
     # funzione per trovare tutti i manga piaciuti
-    nickname = nickname_account
-    nome = "nome"
-    cognome = "cognome"
-    email = "email"
-    id = 12
-    manga_visti = [manga_object, manga_object, manga_object]
-    manga_piaciuti = [manga_object, manga_object, manga_object, manga_object]
 
+    user = script.get_user_informations(id_account)[0]
     utente = {
-        "id": id,
-        "nickname": nickname,
-        "nome": nome,
-        "cognome": cognome,
-        "email": email,
+        "ID": user[0],
+        "nome": user[1],
+        "cognome": user[2],
+        "data_Nascita": user[3],
+        "nickname": user[4],
+        "email": user[5],
         "manga_visti": manga_visti,
         "manga_piaciuti": manga_piaciuti,
     }

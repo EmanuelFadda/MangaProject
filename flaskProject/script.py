@@ -146,3 +146,49 @@ def get_manga_by_list_id(ids):
     except Exception as e:
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return None
+
+# def login_search()
+
+
+def get_user_informations(id):
+    cur = mysql.connection.cursor()
+    where = "WHERE ID="+id
+    query = """
+            SELECT *
+            FROM utente
+            """+where
+
+    cur.execute(query)
+    user = cur.fetchall()
+    return user
+
+
+def get_viewed_manga(id):
+    cur = mysql.connection.cursor()
+    where = "WHERE utente.ID="+id
+    query = """
+            SELECT manga.*
+            FROM manga 
+            join letto on manga.ID=letto.ID_manga
+            join utente on letto.ID_utente=utente.ID
+            """+where
+
+    cur.execute(query)
+    manga = cur.fetchall()
+    return manga
+
+
+def get_favorite_manga(id):
+    cur = mysql.connection.cursor()
+    where = "WHERE utente.ID="+id
+    query = """
+            SELECT manga.*
+            FROM manga 
+            join preferiti on manga.ID=preferiti.ID_manga
+            join utente on preferiti.ID_utente=utente.ID
+            """+where
+
+    cur.execute(query)
+    manga = cur.fetchall()
+
+    return manga
