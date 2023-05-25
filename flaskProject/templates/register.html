@@ -2,6 +2,11 @@
 {% block pagetitle %}
 Register
 {% endblock %}
+{% block cssjs %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleRegister.css') }}">
+
+{% endblock %}
 {% block content %}
 <div class="container">
     <h1>Registration</h1>

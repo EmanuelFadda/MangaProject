@@ -4,7 +4,9 @@
 {{utente.ID}} - {{utente.nickname}}
 {% endblock %}
 
-{% block cssjs %}{% endblock %}
+{% block cssjs %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleProfile.css') }}">
+{% endblock %}
 
 {% block content %}
 <div>
