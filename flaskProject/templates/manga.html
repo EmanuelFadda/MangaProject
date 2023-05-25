@@ -65,7 +65,7 @@
             <h3>Commenti</h3>
             {% for commento in comments %}
                 <div class="commento" style=" border: 2px rgb(6, 248, 248) solid; margin: 2px;">
-                    <a href="/profile/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
+                    <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
                     <p>{{ commento[1] }} </p>
                 </div>
             {% endfor %}
