@@ -1,23 +1,26 @@
 {% extends "base.html" %}
+{% block pagetitle %}
+Register
+{% endblock %}
 {% block content %}
-    <div class="container">
-        <h1>Registration</h1>
-        {% if error_message %}
-        <div class="alert alert-danger" role="alert">
-            {{ error_message }}
-        </div>
-        {% endif %}
-        <form method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-        <p>Already have an account? <a href="/login">Login</a></p>
+<div class="container">
+    <h1>Registration</h1>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
     </div>
+    {% endif %}
+    <form method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <p>Already have an account? <a href="/login">Login</a></p>
+</div>
 {% endblock %}

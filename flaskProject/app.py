@@ -137,5 +137,15 @@ def capitolo(idm, nc):
     return render_template('capitolo.html', genres=script.get_all_genres(), people=script.get_all_person(), imgs=imgs, chapters=chapters, chp=nc, idm=idm)
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
