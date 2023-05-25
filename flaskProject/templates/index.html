@@ -50,19 +50,21 @@ Home
             <input type="hidden" name="artist" value="{{ filter['artist'] }}">
             <input type="hidden" name="year" value="{{ filter['year'] }}">
             <input type="hidden" name="page" value="{{ filter['page']-1 }}">
-            <button type="submit">pagina precendente</button>
+            <button type="submit">pagina precendente ( {{ filter['page']-1 }} )</button>
         </form>
     {% endif %}
     {% if manga_data %}
-    <form action="/" method="POST">
-        <input type="hidden" name="search" value="{{ filter['search'] }}">
-        <input type="hidden" name="genre" value="{{ filter['genre'] }}">
-        <input type="hidden" name="author" value="{{ filter['author'] }}">
-        <input type="hidden" name="artist" value="{{ filter['artist'] }}">
-        <input type="hidden" name="year" value="{{ filter['year'] }}">
-        <input type="hidden" name="page" value="{{ filter['page']+1 }}">
-        <button type="submit">pagina successiva</button>
-    </form>
+        {% if manga_data|length==18 %}
+        <form action="/" method="POST">
+            <input type="hidden" name="search" value="{{ filter['search'] }}">
+            <input type="hidden" name="genre" value="{{ filter['genre'] }}">
+            <input type="hidden" name="author" value="{{ filter['author'] }}">
+            <input type="hidden" name="artist" value="{{ filter['artist'] }}">
+            <input type="hidden" name="year" value="{{ filter['year'] }}">
+            <input type="hidden" name="page" value="{{ filter['page']+1 }}">
+            <button type="submit">pagina successiva ( {{ filter['page']+1 }} )</button>
+        </form>
+        {% endif %}
     {% endif %}
 </center>
 {% endblock %}
