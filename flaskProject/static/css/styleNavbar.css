@@ -14,3 +14,8 @@
 .navbar-toggler:focus {
     outline: none;
 }
+body{
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
