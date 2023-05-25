@@ -82,7 +82,7 @@ def get_ids_for_page(title="", genre="", author="", artist="", year="", page=1):
     where = "WHERE 1=1"
     params = []
     limit = " LIMIT "+str(MANGA_FOR_PAGE)
-    skip = " SKIP "+str(MANGA_FOR_PAGE*(page-1))
+    skip = " OFFSET "+str(MANGA_FOR_PAGE*(page-1))
     # filtra per nome
     if title != "":
         where += " AND titolo LIKE %s"
@@ -105,18 +105,16 @@ def get_ids_for_page(title="", genre="", author="", artist="", year="", page=1):
         join += " JOIN disegna ON manga.id=disegna.ID_Manga "
         where += " AND ID_Artista=%s"
         params.append(int(artist))
-
     # filtra per anno
     if year != "":
         where += " AND Anno=%s"
         params.append(int(year))
-    print(base_query+join+where+limit)
-    cur.execute(base_query+join+where+limit, params)
+    print(title)
+    cur.execute(base_query+join+where+limit+skip, params)
     ids = []
     for manga in cur.fetchall():
         ids.append(manga[0])
     return tuple(ids)
-
 
 def get_manga_by_list_id(ids):
     try:

@@ -14,30 +14,42 @@ mysql = MySQL(app)
 
 MANGA_FOR_PAGE = 18
 
+filter={
+            "search": "",
+            "genre":"",
+            "author":"",
+            "artist":"",
+            "year":"",
+            "page": 1
+    }
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    filter={
+            "search": "",
+            "genre":"",
+            "author":"",
+            "artist":"",
+            "year":"",
+            "page": 1
+    }
     if request.method == 'POST':
+        
         result = None
-        if len(request.form) == 1:
-            titolo = request.form['search']
-            ids = script.get_ids_for_page(title=titolo)
-            result = script.get_manga_by_list_id(tuple(ids))
-
-        else:
-            genre = request.form['genre']
-            author = request.form['author']
-            artist = request.form['artist']
-            year = request.form['year']
-            ids = script.get_ids_for_page(
-                genre=genre, author=author, artist=artist, year=year)
-            result = script.get_manga_by_list_id(tuple(ids))
+        filter['search'] = request.form['search']
+        filter['genre'] = request.form['genre']
+        filter['author'] = request.form['author']
+        filter['artist'] = request.form['artist']
+        filter['year'] = request.form['year']
+        filter['page'] = int(request.form['page'])
+        ids = script.get_ids_for_page(filter['search'],filter['genre'],filter['author'],filter['artist'],filter['year'],filter['page'])
+        result = script.get_manga_by_list_id(tuple(ids))
         if result:
-            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person())
+            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
         else:
-            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person())
+            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
     else:
-        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person())
+        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
 
 
 @app.route('/manga/<int:id>')
