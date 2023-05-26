@@ -1,4 +1,4 @@
-const token = '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'
+const token = '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'
 function consigliami() {
     txt = document.getElementById('testo-consiglio')
     manga = document.getElementById("advice").value
