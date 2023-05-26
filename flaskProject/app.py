@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 
 import script
@@ -77,19 +77,6 @@ def profile(id_account):
 
     manga_visti = script.get_viewed_manga(id_account)
     manga_piaciuti = script.get_favorite_manga(id_account)
-    id_manga = 12
-    titolo = "titolo"
-    copertina = "url_copertina"
-    descrizione = "descrizione"
-    anno = 1900
-
-    manga_object = {
-        "ID": id_manga,
-        "titolo": titolo,
-        "copertina": copertina,
-        "descrizione": descrizione,
-        "anno": anno
-    }
 
     # funzione per controllare l'esistenza dell'account
     # funzione per trovare tutti i manga visti
@@ -164,10 +151,11 @@ def complete_login():
     email = request.form.get("email")
     password = request.form.get("password")
     result = script.control_login(email, password)
-    user_id = "-1"
-    if len(result) != 0:
-        user_id = str(result[0][0])
-    return user_id
+    user_id = ""
+    if len(result) == 0:
+        return render_template('login.html', error_message="Login errato, riprova")
+   # user_id = str(result[0][0])
+    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':
