@@ -17,12 +17,12 @@
             <div class="col-sm">
                 <!-- controllo è aggiunta del bottone per il capitolo precendente (se esiste) -->
                 <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp-1 }}">
-                    Capitolo Precedente
+                    <h5>Capitolo Precedente </h5>
                 </a>
             </div>
             {% endif %}
             <div class="col-sm">
-                <select onchange="location = this.value;">
+                <select class="form-control" onchange="location = this.value;">
                     {% for chap in chapters %}
                     {% if chap[1]==chp %}
                     <option selected value="/manga/{{ chap[-1] }}/capitolo/{{ chap[1] }}"> Capitolo - {{ chap[1] }}
@@ -36,7 +36,7 @@
             {% if chapters[-1][1]!=chp %}
             <div class="col-sm">
                 <!-- controllo è aggiunta del bottone per il capitolo successivo (se esiste) -->
-                <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp+1 }}"> Capitolo successivo</a>
+                <a href="/manga/{{ chapters[0][-1] }}/capitolo/{{ chp+1 }}"> <h5> Capitolo successivo </h5></a>
             </div>
             {% endif %}
         </div>

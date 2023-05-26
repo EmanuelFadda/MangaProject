@@ -72,3 +72,12 @@ h1 {
 .card-text.summary.expand {
     max-height: none; /* Altezza massima per visualizzare tutto il testo */
 }
+.capitoliCommenti{
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+

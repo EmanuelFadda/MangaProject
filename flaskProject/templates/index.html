@@ -8,6 +8,29 @@ Home
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styleIndex.css') }}">
+<style>
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link:hover .card {
+    border: 2px solid #007bff;
+}
+
+.card-link:hover .card h5.card-title,
+.card-link:hover .card .genres,
+.card-link:hover .card p.card-text.author-artist {
+    color: black;
+}
+
+.card-link:hover .card p.card-text.summary {
+    color: black;
+}
+
+
+</style>
 {% endblock %}
 
 {% block content %}
@@ -18,30 +41,32 @@ Home
         <div class="row">
             {% for manga in manga_data %}
             <div class="col-md-6 col-lg-4">
-                <div class="card mb-4">
-                    <img src="{{ manga[3] }}" alt="Cover Image" class="card-img-top" style="max-height: 400px;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ manga[1] }}</h5>
-                        <div class="genres">
-                            {{ manga[5] }}
+                <a href="/manga/{{ manga[0] }}" class="card-link">
+                    <div class="card mb-4">
+                        <img src="{{ manga[3] }}" alt="Cover Image" class="card-img-top" style="max-height: 400px;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ manga[1] }}</h5>
+                            <div class="genres">
+                                {{ manga[5] }}
+                            </div>
+                            <p class="card-text author-artist">
+                                <span class="font-weight-bold">Author:</span> {{ manga[6] }}<br>
+                                <span class="font-weight-bold">Artist:</span> {{ manga[7] }}
+                            </p>
+                            <p class="card-text summary fog">{{ manga[2] }}</p>
                         </div>
-                        <p class="card-text author-artist">
-                            <span class="font-weight-bold">Author:</span> {{ manga[6] }}<br>
-                            <span class="font-weight-bold">Artist:</span> {{ manga[7] }}
-                        </p>
-                        <p class="card-text summary fog">{{ manga[2] }}</p>
-                        <a href="/manga/{{ manga[0] }}" class="btn btn-primary">Inizia a leggerlo</a>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
         {% else %}
         <center>
-            <h2 style="color: white;">No results found</h2>
+            <h2>No results found</h2>
         </center>
         {% endif %}
     </div>
+</center>
     {% if filter['page']!=1 %}
         <form action="/" method="POST">
             <input type="hidden" name="search" value="{{ filter['search'] }}">

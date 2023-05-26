@@ -7,10 +7,15 @@
 {% block cssjs %}
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styleManga.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xx+8mISDoMyFqN2C4jnUfndFv9VCQ9kHXfGrFjNn+2Yr9bJe6qrCt/9iC1fY+jwwM3JbU6TD53CmrqQGvzgNpw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+
+
+    <br><br>
+    <div class="container" style="border-radius: 20px">
         <div class="card">
             <div class="row no-gutters">
                 <div class="col-md-4">
@@ -61,29 +66,73 @@
 
         </div>
         <a href="/" class="btn btn-primary">Back to Search</a>
-        <div id="Commenti" style=" border: 2px rgb(0, 0, 0) solid; margin: 2px;">
-            <h3>Commenti</h3>
-            {% for commento in comments %}
-                <div class="commento" style=" border: 2px rgb(6, 248, 248) solid; margin: 2px;">
-                    <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
-                    <p>{{ commento[1] }} </p>
-                </div>
-            {% endfor %}
-        </div>
-        <div id="capitoli" style=" border: 2px rgb(255, 0, 0) solid; margin: 2px;">
-            <h3>Capitolo</h3>
-            {% for chap in chapters %}
-                <a href="/manga/{{ manga[0] }}/capitolo/{{ chap[1] }}">capitolo {{ chap[1] }}</a><br>
-            {% endfor %}
-        </div>
-        <div style=" border: 2px rgb(0, 252, 168) solid; margin: 2px;">
-            <h1>Consigli</h1>
-            <button id ="advice" value="{{ manga[1] }}" onclick="consigliami()">Consiglio</button>
-            <div id="testo-consiglio">
-    
+
+
+    </div>
+
+<br>
+
+<div class="capitoliCommenti" style="border-radius: 20px">
+    <div id="accordion">
+        <div class="card" style="border: 2px solid red; border-radius: 20px">
+            <div class="card-header text-center" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3>Capitoli <i class="fas fa-chevron-down"></i></h3>
+                    </button>
+                </h5>
             </div>
-            <script src="{{ url_for('static', filename='chat.js') }}"></script>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    {% for chap in chapters %}
+                        <a href="/manga/{{ manga[0] }}/capitolo/{{ chap[1] }}" class="chapter-link"><h5>Capitolo {{ chap[1] }}</h5></a><br>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    
+
+    <br>
+
+    <div id="accordion">
+        <div class="card" style="border: 2px solid blue; border-radius: 20px">
+            <div class="card-header text-center" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <h3>Commenti <i class="fas fa-chevron-down"></i></h3>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body text-center">
+                    {% for commento in comments %}
+                        <div class="commento">
+                            <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
+                            <p>{{ commento[1] }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+<div style="border: 2px rgb(0, 252, 168) solid; margin: 2px; border-radius: 20px">
+    <button type="button" class="btn btn-block" onclick="consigliami()">
+        <input type="hidden" id="advice" value=" {{ manga[1] }} "> 
+        <h3 class="text-center">Consigli</h3>
+        <div id="testo-consiglio" class="text-center"></div>
+    </button>
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</div>
+
+
+
+
+
+</div>
+
+
+
 {% endblock %}
