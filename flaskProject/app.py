@@ -14,27 +14,28 @@ mysql = MySQL(app)
 
 MANGA_FOR_PAGE = 18
 
-filter={
-            "search": "",
-            "genre":"",
-            "author":"",
-            "artist":"",
-            "year":"",
+filter = {
+    "search": "",
+    "genre": "",
+    "author": "",
+    "artist": "",
+    "year": "",
             "page": 1
-    }
+}
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    filter={
-            "search": "",
-            "genre":"",
-            "author":"",
-            "artist":"",
-            "year":"",
-            "page": 1
+    filter = {
+        "search": "",
+        "genre": "",
+        "author": "",
+        "artist": "",
+        "year": "",
+        "page": 1
     }
     if request.method == 'POST':
-        
+
         result = None
         filter['search'] = request.form['search']
         filter['genre'] = request.form['genre']
@@ -42,14 +43,15 @@ def index():
         filter['artist'] = request.form['artist']
         filter['year'] = request.form['year']
         filter['page'] = int(request.form['page'])
-        ids = script.get_ids_for_page(filter['search'],filter['genre'],filter['author'],filter['artist'],filter['year'],filter['page'])
+        ids = script.get_ids_for_page(
+            filter['search'], filter['genre'], filter['author'], filter['artist'], filter['year'], filter['page'])
         result = script.get_manga_by_list_id(tuple(ids))
         if result:
-            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
+            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
         else:
-            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
+            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
     else:
-        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(),filter=filter)
+        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
 
 
 @app.route('/manga/<int:id>')
@@ -155,6 +157,17 @@ def login():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+
+@app.route('/complete_login', methods=['POST'])
+def complete_login():
+    email = request.form.get("email")
+    password = request.form.get("password")
+    result = script.control_login(email, password)
+    user_id = "-1"
+    if len(result) != 0:
+        user_id = str(result[0][0])
+    return user_id
 
 
 if __name__ == '__main__':

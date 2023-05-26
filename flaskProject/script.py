@@ -116,6 +116,7 @@ def get_ids_for_page(title="", genre="", author="", artist="", year="", page=1):
         ids.append(manga[0])
     return tuple(ids)
 
+
 def get_manga_by_list_id(ids):
     try:
         cur = mysql.connection.cursor()
@@ -190,3 +191,21 @@ def get_favorite_manga(id):
     manga = cur.fetchall()
 
     return manga
+
+# la funzione returna l'id dell'utente che
+# corrisponde alle credenziali inserite
+
+
+def control_login(email, password):
+    cur = mysql.connection.cursor()
+    # SELECT utente.ID FROM utente where utente.email="marcorossi@gmail.com"
+    # AND utente.password="marcorossi"
+    where = "WHERE utente.email='"+email+"' AND utente.password='"+password+"'"
+    query = """
+            SELECT utente.ID
+            FROM utente
+            """+where
+
+    cur.execute(query)
+    id_user = cur.fetchall()
+    return id_user
