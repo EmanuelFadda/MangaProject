@@ -192,20 +192,65 @@ def get_favorite_manga(id):
 
     return manga
 
-# la funzione returna l'id dell'utente che
+# la funzione riitorna gli attirbuti id,nickname,admin dell'utente che
 # corrisponde alle credenziali inserite
 
 
 def control_login(email, password):
     cur = mysql.connection.cursor()
-    # SELECT utente.ID FROM utente where utente.email="marcorossi@gmail.com"
-    # AND utente.password="marcorossi"
+
     where = "WHERE utente.email='"+email+"' AND utente.password='"+password+"'"
+    # aggiungere admin
+    query = """
+            SELECT utente.ID, utente.nickname
+            FROM utente
+            """+where
+
+    cur.execute(query)
+    result = cur.fetchall()[0]
+    # al momento si mette false per indicare che il seguente utente non è admin,
+    # al completamento del database verrà modificata la funzione
+    result = result + (False,)
+    print(result)
+    return result
+
+# la funzione controlla se l'email con cui ci registra è già stata usata
+# da qualcoda, in caso di true non ci saranno utenti con questa email
+# e si potrà fare la registrazione
+
+
+def control_register(email):
+    cur = mysql.connection.cursor()
+
+    where = "WHERE utente.email='"+email+"'"
+    # aggiungere admin
     query = """
             SELECT utente.ID
             FROM utente
             """+where
 
     cur.execute(query)
-    id_user = cur.fetchall()
-    return id_user
+
+    result = cur.fetchall()
+    # al momento si mette false per indicare che il seguente utente non è admin,
+    # al completamento del database verrà modificata la funzione
+    if len(result) == 0:
+        return True
+    return False
+
+
+# l'id viene generato in automatico dal database
+# di default si creano account non admin
+def create_account(email, password, nome, cognome, nickname, data_Nascita, admin=0):
+    cur = mysql.connection.cursor()
+    # INSERT INTO `utente`
+    # (`ID`, `nome`, `cognome`, `data_Nascita`, `nickname`, `email`, `password`)
+    # VALUES (NULL, 'lollo', 'goto', '2023-05-01', 'lollo_goto', 'lollogoto@gmail.com', 'lollogoto');
+    query = f"""
+            INSERT INTO `utente` 
+            (`ID`, `nome`, `cognome`, `data_Nascita`, `nickname`, `email`, `password`, admin)
+            VALUES (NULL, '{nome}', '{cognome}', '{data_Nascita}', '{nickname}', '{email}', '{password}','{admin}')
+            """
+    print(query)
+    cur.execute(query)
+    mysql.connection.commit()

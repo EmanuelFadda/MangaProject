@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 
 import script
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = 'key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
@@ -26,6 +26,12 @@ filter = {
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    user_session = {}
+    if session.get("user_id"):
+        user_session["user_id"] = session["user_id"]
+        user_session["nickname"] = session["nickname"]
+        user_session["admin"] = session["admin"]
+        print(user_session)
     filter = {
         "search": "",
         "genre": "",
@@ -35,7 +41,6 @@ def index():
         "page": 1
     }
     if request.method == 'POST':
-
         result = None
         filter['search'] = request.form['search']
         filter['genre'] = request.form['genre']
@@ -47,11 +52,14 @@ def index():
             filter['search'], filter['genre'], filter['author'], filter['artist'], filter['year'], filter['page'])
         result = script.get_manga_by_list_id(tuple(ids))
         if result:
-            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
+            print(user_session)
+            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
         else:
-            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
+            print(user_session)
+            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
     else:
-        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter)
+        print(user_session)
+        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
 
 
 @app.route('/manga/<int:id>')
@@ -143,7 +151,7 @@ def login():
 
 @app.route('/register')
 def register():
-    return render_template('register.html')
+    return render_template('register.html', error_message="")
 
 
 @app.route('/complete_login', methods=['POST'])
@@ -151,11 +159,45 @@ def complete_login():
     email = request.form.get("email")
     password = request.form.get("password")
     result = script.control_login(email, password)
-    user_id = ""
     if len(result) == 0:
         return render_template('login.html', error_message="Login errato, riprova")
-   # user_id = str(result[0][0])
+    user_id = str(result[0])
+    nickname = str(result[1])
+    admin = result[2]
+    session["user_id"] = user_id
+    session["nickname"] = nickname
+    session["admin"] = admin
     return redirect(url_for("index"))
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+
+@app.route("/complete_register", methods=['POST'])
+def complete_register():
+    print("1")
+    password = request.form.get("password")
+    confirm_password = request.form.get("confirm_password")
+    if (password == confirm_password):
+        print("2")
+        email = request.form.get("email")
+        if (script.control_register(email)):
+            print("3")
+            nickname = request.form.get("nickname")
+            data_Nascita = request.form.get("data_Nascita")
+            cognome = request.form.get("cognome")
+            nome = request.form.get("nome")
+            script.create_account(email, password, nome,
+                                  cognome, nickname, data_Nascita)
+            print("Tutto corretto")
+            return redirect(url_for("index"))
+        print("email errata")
+        return render_template('register.html', error_message="Esiste già un utente che usa l'email inserita, riprova")
+    print("password errata")
+    return render_template('register.html', error_message='Verificare che sia inserita la stessa password nei campi "Password" e "Conferma password, riprova"')
 
 
 if __name__ == '__main__':

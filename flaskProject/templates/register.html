@@ -15,16 +15,36 @@ Register
         {{ error_message }}
     </div>
     {% endif %}
-    <form method="/result_register" method="POST">
+    <form action="/complete_register" method="POST">
         <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+            <label for="cognome">Cognome</label>
+            <input type="text" class="form-control" id="cognome" name="cognome" required>
+        </div>
+        <div class="form-group">
+            <label for="data_Nascita">Data di nascita</label>
+            <input type="date" class="form-control" id="data_Nascita" name="data_Nascita" required>
+        </div>
+        <div class="form-group">
+            <label for="email">email</label>
+            <input type="text" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="nickname">Nickname</label>
+            <input type="text" class="form-control" id="nickname" name="nickname" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="form-group">
+            <label for="confirm_password">Conferma password</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
     <p>Already have an account? <a href="/login">Login</a></p>
 </div>
