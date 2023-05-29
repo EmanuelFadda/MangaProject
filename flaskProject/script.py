@@ -171,7 +171,7 @@ def get_viewed_manga(id):
             join letto on manga.ID=letto.ID_manga
             join utente on letto.ID_utente=utente.ID
             """+where
-
+    print(query)
     cur.execute(query)
     manga = cur.fetchall()
     return manga

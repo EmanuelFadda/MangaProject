@@ -42,9 +42,14 @@
                 </button>
             </form>
             <div class="ml-auto">
-
+                {% if user["user_id"] %}
+                <a href="/logout" class="btn btn-outline-primary mr-2">Logout</a>
+                <a href="/account/{{user['user_id']}}" class="btn btn-outline-primary">Profile</a>
+                {% else %}
                 <a href="/login" class="btn btn-outline-primary mr-2">Login</a>
                 <a href="/register" class="btn btn-outline-primary">Register</a>
+                {% endif %}
+
             </div>
         </div>
     </nav>
