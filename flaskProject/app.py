@@ -11,7 +11,6 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'mangarealm'
 
 
-user_session = {}
 mysql = MySQL(app)
 
 MANGA_FOR_PAGE = 18
@@ -38,13 +37,7 @@ def index():
         "year": "",
         "page": 1
     }
-
-    #se l'utente è loggato vengono salvata le sue informazioni
-    if session.get("user_id") != None:
-        user_session["user_id"] = session["user_id"]
-        user_session["nickname"] = session["nickname"]
-        user_session["admin"] = session["admin"]
-
+        
     #sezione di ricerca dei manga tramite il filtro    
     if request.method == 'POST':
         result = None
@@ -61,11 +54,11 @@ def index():
         #recupero dal database delle informazioni riguardanti i 18 manga prima ottenuti
         result = script.get_manga_by_list_id(tuple(ids))
         if result:
-            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
+            return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=session)
         else:
-            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
+            return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=session)
     else:
-        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
+        return render_template('index.html', manga_data=None, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=session)
 
 
 #pagina del singolo manga
@@ -85,9 +78,9 @@ def manga_details(id):
     comments = script.get_comments_by_manga_id(id)
 
     if manga:
-        return render_template('manga.html', genres=script.get_all_genres(), people=script.get_all_person(), manga=manga, chapters=chapters, comments=comments, user=user_session,preferito=esiste)
+        return render_template('manga.html', genres=script.get_all_genres(), people=script.get_all_person(), manga=manga, chapters=chapters, comments=comments, user=session,preferito=esiste)
     else:
-        return render_template('error.html', genres=script.get_all_genres(), people=script.get_all_person(), message='Manga not found', user=user_session,preferito=esiste)
+        return render_template('error.html', genres=script.get_all_genres(), people=script.get_all_person(), message='Manga not found', user=session,preferito=esiste)
 
 #pagina profilo di un account
 @app.route('/account/<id_account>')
@@ -120,7 +113,7 @@ def profile(id_account):
         "manga_piaciuti": manga_piaciuti,
     }
 
-    return render_template('profile.html',genres=script.get_all_genres(), people=script.get_all_person(), utente=utente, user=user_session,seguiti=seguiti,segue=segue)
+    return render_template('profile.html',genres=script.get_all_genres(), people=script.get_all_person(), utente=utente, user=session,seguiti=seguiti,segue=segue)
 
 #pagina di un capitolo di un manga
 @app.route('/manga/<int:idm>/capitolo/<int:nc>')
@@ -169,7 +162,7 @@ def capitolo(idm, nc):
         imgs.append(start_url+str(pages)+"."+extension)
         pages += 1
 
-    return render_template('capitolo.html', genres=script.get_all_genres(), people=script.get_all_person(), imgs=imgs, chapters=chapters, chp=nc, idm=idm, user=user_session)
+    return render_template('capitolo.html', genres=script.get_all_genres(), people=script.get_all_person(), imgs=imgs, chapters=chapters, chp=nc, idm=idm, user=session)
 
 #pagina di login
 @app.route('/login')
@@ -208,7 +201,6 @@ def complete_login():
 @app.route("/logout")
 def logout():
     session.clear()
-    user_session.clear()
     return redirect(url_for("index"))
 
 #route per controllo dei dati inseriti nel register, redirect alla pagina iniziale se i dati sono compilati correttamente
