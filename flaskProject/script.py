@@ -187,6 +187,23 @@ def get_user_informations(id):
     user = cur.fetchall()
     return user
 
+#recupero delle informazioni di un utente
+def get_follow(id):
+    cur = mysql.connection.cursor()
+
+    #query
+    query = """
+            SELECT utente.ID,utente.nickname
+            FROM segue
+            JOIN utente ON segue.seguito=utente.ID 
+            WHERE segue.ID_Utente=%s
+            """
+
+    #return dei dati
+    cur.execute(query,(id,))
+    user = cur.fetchall()
+    return user
+
 #recupero dei manga letti da un utente
 def get_viewed_manga(id):
     cur = mysql.connection.cursor()
@@ -365,4 +382,44 @@ def add_read(idutente,idmanga):
             INSERT INTO letto(ID_Utente,ID_Manga) VALUES (%s ,%s)
             """
     cur.execute(query,(idutente,idmanga))
+    mysql.connection.commit()
+
+
+#controllo se un account è tra i seguiti di un certo account
+def is_follower(idutente,idutente2):
+    cur = mysql.connection.cursor()
+
+    #query
+    query = """
+            SELECT * FROM segue WHERE ID_Utente=%s AND seguito=%s
+            """
+    cur.execute(query,(idutente,idutente2))
+    result=cur.fetchone()
+
+    if result is None:
+        return False
+    else:
+        return True
+
+
+#aggiunge un account ai seguiti di un utente   
+def add_follower(idutente,idutente2):
+    cur = mysql.connection.cursor()
+
+    #query
+    query = """
+            INSERT INTO segue(ID_Utente,seguito) VALUES (%s ,%s)
+            """
+    cur.execute(query,(idutente,idutente2))
+    mysql.connection.commit()
+
+#rimuovere un account dai seguiti di un utente  
+def delete_follower(idutente,idutente2):
+    cur = mysql.connection.cursor()
+
+    #query
+    query = """
+            DELETE FROM segue WHERE ID_Utente=%s AND seguito=%s
+            """
+    cur.execute(query,(idutente,idutente2))
     mysql.connection.commit()

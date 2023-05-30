@@ -93,6 +93,14 @@ def manga_details(id):
 @app.route('/account/<id_account>')
 def profile(id_account):
 
+    segue=False
+    #controllo, se l'utente è loggato, che il manga sia presente o meno trai suoi preferiti
+    if session.get("user_id") != None:
+        segue=script.is_follower(session['user_id'],id_account)
+
+    #recupero degli utenti che segue l'utente
+    seguiti = script.get_follow(id_account)
+
     #recupero dei manga letti dall'utente
     manga_visti = script.get_viewed_manga(id_account)
 
@@ -112,7 +120,7 @@ def profile(id_account):
         "manga_piaciuti": manga_piaciuti,
     }
 
-    return render_template('profile.html', utente=utente, user=user_session)
+    return render_template('profile.html', utente=utente, user=user_session,seguiti=seguiti,segue=segue)
 
 #pagina di un capitolo di un manga
 @app.route('/manga/<int:idm>/capitolo/<int:nc>')
@@ -273,9 +281,29 @@ def azione_preferiti(idm):
 
             #aggiunta ai preferiti
             script.add_favorite(idu,idm)   
-            
+
     return redirect(url_for('manga_details', id=idm))
 
+
+#route per la rimozione o aggiunta di un utente tra i seguiti di un utente
+@app.route('/actionfollower/<int:idu>',methods=['GET', 'POST'])
+def azione_seguiti(idu):
+    if request.method=="POST":
+        idsession=session["user_id"]
+
+        #controllo presenza tra i seguiti
+        presente=script.is_follower(idsession,idu)
+
+        if presente:
+
+            #rimosso dai seguiti
+            script.delete_follower(idsession,idu)  
+        else:
+
+            #aggiunto ai seguiti
+            script.add_follower(idsession,idu)   
+            
+    return redirect(url_for('profile', id_account=idu))
 
 if __name__ == '__main__':
     app.run(debug=True)
