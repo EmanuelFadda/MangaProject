@@ -19,37 +19,50 @@ def exists(path):
     r = requests.head(path)
     return r.status_code == requests.codes.ok
 
-
+#recupero di tutti i generi presente nel database
 def get_all_genres():
     try:
         cur = mysql.connection.cursor()
+
+        #query
         query = "SELECT * FROM categoria;"
+
+        #return dei dati
         cur.execute(query)
         genres = cur.fetchall()
         cur.close()
         return genres
+    
     except Exception as e:
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return []
 
-
+#recupero dei capitolo di un certo manga
 def get_chapters_by_manga_id(id):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             SELECT capitolo.*
             FROM capitolo
             WHERE ID_Manga=%s
             ORDER BY numeroVolume,numeroCapitolo ASC
             """
+    
+    #return dei dati
     cur.execute(query, (id,))
     chapters = cur.fetchall()
     return chapters
 
-
+#recupero di tutti gli artisti o autori
 def get_all_person():
     try:
         cur = mysql.connection.cursor()
+
+        #query
         query = "SELECT * FROM persona ORDER BY persona.nome ASC"
+
+        #return dei dati
         cur.execute(query)
         person = cur.fetchall()
         cur.close()
@@ -58,9 +71,11 @@ def get_all_person():
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return []
 
-
+#recupero di tutti i commenti sotto a un certo manga
 def get_comments_by_manga_id(id):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             SELECT commento.*, utente.ID, utente.nickname
             FROM commento
@@ -68,11 +83,13 @@ def get_comments_by_manga_id(id):
             WHERE ID_Manga=%s
             ORDER BY commento.ID DESC
             """
+    
+    #return dei dati
     cur.execute(query, (id,))
     chapters = cur.fetchall()
     return chapters
 
-
+#recupero degli id di un numero di manga (18 di base)
 def get_ids_for_page(title="", genre="", author="", artist="", year="", page=1):
     cur = mysql.connection.cursor()
     first = True
@@ -106,12 +123,15 @@ def get_ids_for_page(title="", genre="", author="", artist="", year="", page=1):
         join += " JOIN disegna ON manga.id=disegna.ID_Manga "
         where += " AND ID_Artista=%s"
         params.append(int(artist))
+
     # filtra per anno
     if year != "":
         where += " AND Anno=%s"
         params.append(int(year))
     print(title)
     cur.execute(base_query+join+where+limit+skip, params)
+
+    #return degli id
     ids = []
     for manga in cur.fetchall():
         ids.append(manga[0])
@@ -125,6 +145,7 @@ def get_manga_by_list_id(ids):
         # palcehoder per evitare l'sql injection
         placeholders = "("+(','.join(['%s'] * len(ids)))+")"
 
+        #query
         query = f"""
             SELECT m.*, GROUP_CONCAT(DISTINCT c.titolo SEPARATOR ', ') AS Genres,
                     GROUP_CONCAT(DISTINCT aut.nome SEPARATOR ', ') AS Authors,
@@ -139,6 +160,8 @@ def get_manga_by_list_id(ids):
             WHERE m.ID IN {placeholders}
             GROUP BY m.ID;
             """
+        
+        #return dei dati
         cur.execute(query, ids)
         result = cur.fetchall()
         cur.close()
@@ -147,162 +170,182 @@ def get_manga_by_list_id(ids):
         print(f"Errore durante l'esecuzione della query: {str(e)}")
         return None
 
-# def login_search()
 
-
+#recupero delle informazioni di un utente
 def get_user_informations(id):
     cur = mysql.connection.cursor()
-    where = "WHERE ID="+id
+
+    #query
     query = """
             SELECT *
             FROM utente
-            """+where
+            WHERE ID=%s
+            """
 
-    cur.execute(query)
+    #return dei dati
+    cur.execute(query,(id,))
     user = cur.fetchall()
     return user
 
-
+#recupero dei manga letti da un utente
 def get_viewed_manga(id):
     cur = mysql.connection.cursor()
-    where = "WHERE utente.ID="+id
+
+    #query
     query = """
             SELECT manga.*
             FROM manga 
             join letto on manga.ID=letto.ID_manga
             join utente on letto.ID_utente=utente.ID
-            """+where
-    cur.execute(query)
+            WHERE utente.ID=%s
+            """
+    
+    #return dei dati
+    cur.execute(query, (id,))
     manga = cur.fetchall()
     return manga
 
-
+#recupero dei manga preferiti da un utente
 def get_favorite_manga(id):
     cur = mysql.connection.cursor()
-    where = "WHERE utente.ID="+id
+
+    #query
     query = """
             SELECT manga.*
             FROM manga 
             join preferiti on manga.ID=preferiti.ID_manga
             join utente on preferiti.ID_utente=utente.ID
-            """+where
+            WHERE utente.ID=%s
+            """
 
-    cur.execute(query)
+    #return dei dati
+    cur.execute(query,(id,))
     manga = cur.fetchall()
-
     return manga
 
-# la funzione riitorna gli attirbuti id,nickname,admin dell'utente che
-# corrisponde alle credenziali inserite
 
-
+#controllo informazioni inserite nel login con quelle presenti nel database
 def control_login(email, password):
     cur = mysql.connection.cursor()
 
-    where = "WHERE utente.email='"+email+"' AND utente.password='"+password+"'"
-    # aggiungere admin
+    where = ""
+
+    #query
     query = """
             SELECT utente.ID, utente.nickname,utente.admin
             FROM utente
-            """+where
+            WHERE utente.email=%s AND utente.password=%s
+            """
 
-    cur.execute(query)
+    #return dei dati
+    cur.execute(query,(email,password))
     result = cur.fetchone()
-    
-    # al momento si mette false per indicare che il seguente utente non è admin,
-    # al completamento del database verrà modificata la funzione
-    print(result)
     return result
 
-# la funzione controlla se l'email con cui ci registra è già stata usata
-# da qualcoda, in caso di true non ci saranno utenti con questa email
-# e si potrà fare la registrazione
 
-
+#controllo informazioni inserite nel login con quelle presenti nel database
 def control_register(email):
     cur = mysql.connection.cursor()
 
-    where = "WHERE utente.email='"+email+"'"
-    # aggiungere admin
+    #query
     query = """
             SELECT utente.ID
             FROM utente
-            """+where
+            WHERE utente.email=%s
+            """
 
-    cur.execute(query)
 
+    cur.execute(query,(email,))
     result = cur.fetchall()
-    # al momento si mette false per indicare che il seguente utente non è admin,
-    # al completamento del database verrà modificata la funzione
+
+    #nessun account con quella mail 
     if len(result) == 0:
         return True
+    
     return False
 
 
-# l'id viene generato in automatico dal database
-# di default si creano account non admin
+# inserimento nuovo account nel database
 def create_account(email, password, nome, cognome, nickname, data_Nascita, admin=0):
     cur = mysql.connection.cursor()
-    # INSERT INTO `utente`
-    # (`ID`, `nome`, `cognome`, `data_Nascita`, `nickname`, `email`, `password`)
-    # VALUES (NULL, 'lollo', 'goto', '2023-05-01', 'lollo_goto', 'lollogoto@gmail.com', 'lollogoto');
-    query = f"""
-            INSERT INTO `utente` 
-            (`ID`, `nome`, `cognome`, `data_Nascita`, `nickname`, `email`, `password`, admin)
-            VALUES (NULL, '{nome}', '{cognome}', '{data_Nascita}', '{nickname}', '{email}', '{password}','{admin}')
+
+    # query
+    query = """
+            INSERT INTO utente
+            ( nome, cognome, data_Nascita, nickname, email, password, admin)
+            VALUES ( %s, %s, %s, %s, %s, %s, %s)
             """
-    print(query)
-    cur.execute(query)
+    cur.execute(query,(nome, cognome, data_Nascita, nickname, email, password, admin))
     mysql.connection.commit()
 
+# inserimento nuovo commento 
 def add_comment(contenuto,idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             INSERT INTO commento(contenuto,ID_Utente,ID_Manga) VALUES (%s ,%s,%s)
             """
     cur.execute(query,(contenuto,idutente,idmanga))
     mysql.connection.commit()
 
-
+#rimozione di un commento
 def delete_comment(idcommento):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             DELETE FROM commento WHERE ID=%s
             """
     cur.execute(query,(idcommento,))
     mysql.connection.commit()
 
+#controllo se un manga è tra i preferiti di un certo account
 def is_favorite(idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             SELECT * FROM preferiti WHERE ID_Utente=%s AND ID_Manga=%s
             """
     cur.execute(query,(idutente,idmanga))
     result=cur.fetchone()
+
     if result is None:
         return False
     else:
         return True
-    
+
+
+#aggiunge un manga ai preferiti di un utente   
 def add_favorite(idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             INSERT INTO preferiti(ID_Utente,ID_Manga) VALUES (%s ,%s)
             """
     cur.execute(query,(idutente,idmanga))
     mysql.connection.commit()
 
-
+#rimuovere un manga dai preferiti di un utente  
 def delete_favorite(idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             DELETE FROM preferiti WHERE ID_Utente=%s AND ID_Manga=%s
             """
     cur.execute(query,(idutente,idmanga))
     mysql.connection.commit()
 
+
+
+#controllo se un manga è tra i letti di un certo account
 def is_read(idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             SELECT * FROM letto WHERE ID_Utente=%s AND ID_Manga=%s
             """
@@ -313,8 +356,11 @@ def is_read(idutente,idmanga):
     else:
         return True
     
+#aggiunge un manga ai letti di un utente 
 def add_read(idutente,idmanga):
     cur = mysql.connection.cursor()
+
+    #query
     query = """
             INSERT INTO letto(ID_Utente,ID_Manga) VALUES (%s ,%s)
             """
