@@ -66,6 +66,7 @@ def get_comments_by_manga_id(id):
             FROM commento
             JOIN utente ON commento.ID_Utente=utente.ID
             WHERE ID_Manga=%s
+            ORDER BY commento.ID DESC
             """
     cur.execute(query, (id,))
     chapters = cur.fetchall()
@@ -202,15 +203,14 @@ def control_login(email, password):
     where = "WHERE utente.email='"+email+"' AND utente.password='"+password+"'"
     # aggiungere admin
     query = """
-            SELECT utente.ID, utente.nickname
+            SELECT utente.ID, utente.nickname,utente.admin
             FROM utente
             """+where
 
     cur.execute(query)
-    result = cur.fetchall()[0]
+    result = cur.fetchone()
     # al momento si mette false per indicare che il seguente utente non è admin,
     # al completamento del database verrà modificata la funzione
-    result = result + (False,)
     print(result)
     return result
 
@@ -253,4 +253,21 @@ def create_account(email, password, nome, cognome, nickname, data_Nascita, admin
             """
     print(query)
     cur.execute(query)
+    mysql.connection.commit()
+
+def add_comment(contenuto,idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            INSERT INTO commento(contenuto,ID_Utente,ID_Manga) VALUES (%s ,%s,%s)
+            """
+    cur.execute(query,(contenuto,idutente,idmanga))
+    mysql.connection.commit()
+
+
+def delete_comment(idcommento):
+    cur = mysql.connection.cursor()
+    query = """
+            DELETE FROM commento WHERE ID=%s
+            """
+    cur.execute(query,(idcommento,))
     mysql.connection.commit()

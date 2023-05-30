@@ -49,8 +49,7 @@ def index():
         filter['artist'] = request.form['artist']
         filter['year'] = request.form['year']
         filter['page'] = int(request.form['page'])
-        ids = script.get_ids_for_page(
-            filter['search'], filter['genre'], filter['author'], filter['artist'], filter['year'], filter['page'])
+        ids = script.get_ids_for_page(filter['search'], filter['genre'], filter['author'], filter['artist'], filter['year'], filter['page'])
         result = script.get_manga_by_list_id(tuple(ids))
         if result:
             return render_template('index.html', manga_data=result, genres=script.get_all_genres(), people=script.get_all_person(), filter=filter, user=user_session)
@@ -157,7 +156,7 @@ def complete_login():
     email = request.form.get("email")
     password = request.form.get("password")
     result = script.control_login(email, password)
-    if len(result) == 0:
+    if result is None:
         return render_template('login.html', error_message="Login errato, riprova", user=None)
     user_id = str(result[0])
     nickname = str(result[1])
@@ -198,6 +197,24 @@ def complete_register():
 
     return render_template('register.html', error_message='Verificare che sia inserita la stessa password nei campi "Password" e "Conferma password, riprova"', user=None)
 
+@app.route('/addcomment/<int:idm>',methods=['GET', 'POST'])
+def aggiungi_commento(idm):
+    if request.method=="POST":
+        idu=request.form['idutente']
+        commento=request.form['contenuto']
+        script.add_comment(commento,idu,idm)
+
+    return redirect(url_for('manga_details', id=idm))
+
+@app.route('/deletecomment/<int:idm>',methods=['GET', 'POST'])
+def elimina_commento(idm):
+    if request.method=="POST":
+        
+        idc=int(request.form['idcommento'])
+        
+        script.delete_comment(idc)
+
+    return redirect(url_for('manga_details', id=idm))
 
 if __name__ == '__main__':
     app.run(debug=True)

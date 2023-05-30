@@ -1,8 +1,8 @@
-const token = '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'
+const token = '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'
 function consigliami() {
     txt = document.getElementById('testo-consiglio')
     manga = document.getElementById("advice").value
-
+    document.getElementById("wait").style.display="block"
     fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -19,5 +19,6 @@ function consigliami() {
     }).then(data => {
         console.log(data.choices[0].message.content)
         txt.innerHTML = data.choices[0].message.content
+        document.getElementById("wait").style.display="none"
     })
 }

@@ -104,11 +104,38 @@
                 </h5>
             </div>
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                {% if user["user_id"] %}
+                <div>
+                    <form method="POST" action="/addcomment/{{ manga[0] }}">
+                        <center>
+                            <input type="hidden" name="idutente" value="{{ user['user_id'] }}">
+                            <textarea rows="8" style="width:90%;" name="contenuto"></textarea>
+                            <br>
+                            <button type="submit">Aggiungi</button>
+                        </center>
+                    </form>
+                </div>
+                {% endif %}
                 <div class="card-body text-center">
                     {% for commento in comments %}
                         <div class="commento">
-                            <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a><br>
-                            <p>{{ commento[1] }}</p>
+                            {% if user["admin"]==True %}
+                                <form method="POST" action="/deletecomment/{{ manga[0] }}" >
+                                    <center>
+                                        <input type="hidden" name="idcommento" value="{{ commento[0] }}">
+                                        <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a>
+                                        <button type="submit" style="background-color: white; border: none;"><img src="{{ url_for('static', filename='images/delete.svg') }}"></button>
+                                        <br>
+                                        <p>{{ commento[1] }}</p>
+                                    </center>
+                                </form>
+                            {% else %}
+                                <center>
+                                    <a href="/account/{{ commento[-2] }}">{{ commento[-1] }} #{{ commento[-2] }}</a>
+                                    <br>
+                                    <p>{{ commento[1] }}</p>
+                                </center>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
@@ -117,16 +144,19 @@
     </div>
 
     <br>
-
-<div style="border: 2px rgb(0, 252, 168) solid; margin: 2px; border-radius: 20px">
-    <button type="button" class="btn btn-block" onclick="consigliami()">
-        <input type="hidden" id="advice" value=" {{ manga[1] }} "> 
-        <h3 class="text-center">Consigli</h3>
-        <div id="testo-consiglio" class="text-center"></div>
-    </button>
-    <script src="{{ url_for('static', filename='chat.js') }}"></script>
-</div>
-
+    {% if user["user_id"] %}
+        <div style="border: 2px rgb(0, 252, 168) solid; margin: 2px; border-radius: 20px">
+            <button type="button" class="btn btn-block" onclick="consigliami()">
+                <input type="hidden" id="advice" value=" {{ manga[1] }} "> 
+                <h3 class="text-center">Consigli</h3>
+                <center>
+                    <img src="{{ url_for('static', filename='images/wait.svg') }}" style="display: none;" id="wait">
+                </center>
+                <div id="testo-consiglio" class="text-center"></div>
+            </button>
+            <script src="{{ url_for('static', filename='chat.js') }}"></script>
+        </div>
+    {% endif %}
 
 
 

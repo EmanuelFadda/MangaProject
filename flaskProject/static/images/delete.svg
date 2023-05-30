@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 width="24px" height="24px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+<g>
+	<g>
+		<path fill="#394240" d="M12,60c0,2.211,1.789,4,4,4h32c2.211,0,4-1.789,4-4V16H12V60z M20,24h24v32H20V24z"/>
+		<path fill="#394240" d="M56,4H40c0-2.211-1.789-4-4-4h-8c-2.211,0-4,1.789-4,4H8C5.789,4,4,5.789,4,8s1.789,4,4,4h48
+			c2.211,0,4-1.789,4-4S58.211,4,56,4z"/>
+	</g>
+	<rect x="20" y="24" fill="#B4CCB9" width="24" height="32"/>
+</g>
+</svg>

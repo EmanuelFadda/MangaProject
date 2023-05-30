@@ -34,7 +34,9 @@ Home
 {% block content %}
 <br><br>
 <center>
-    <h3>Bentornato {{user["nickname"]}}</h3>
+    {% if user['user_id'] %}
+    <h2 style="color: white;">Bentornato {{user["nickname"]}}</h2>
+    {% endif %}
     <div class="search-results">
         {% if manga_data %}
         <div class="row">
@@ -61,7 +63,7 @@ Home
         </div>
         {% else %}
         <center>
-            <h2>No results found</h2>
+            <h3 style="color: white;">No results found</h3>
         </center>
         {% endif %}
     </div>
