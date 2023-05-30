@@ -120,7 +120,7 @@ def profile(id_account):
         "manga_piaciuti": manga_piaciuti,
     }
 
-    return render_template('profile.html', utente=utente, user=user_session,seguiti=seguiti,segue=segue)
+    return render_template('profile.html',genres=script.get_all_genres(), people=script.get_all_person(), utente=utente, user=user_session,seguiti=seguiti,segue=segue)
 
 #pagina di un capitolo di un manga
 @app.route('/manga/<int:idm>/capitolo/<int:nc>')
