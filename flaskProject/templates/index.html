@@ -68,6 +68,7 @@ Home
         {% endif %}
     </div>
 </center>
+<center>
 {% if filter['page']!=1 %}
 <form action="/" method="POST">
     <input type="hidden" name="search" value="{{ filter['search'] }}">
@@ -76,7 +77,7 @@ Home
     <input type="hidden" name="artist" value="{{ filter['artist'] }}">
     <input type="hidden" name="year" value="{{ filter['year'] }}">
     <input type="hidden" name="page" value="{{ filter['page']-1 }}">
-    <button type="submit">pagina precendente ( {{ filter['page']-1 }} )</button>
+    <button type="submit" class="btn btn-warning" >pagina precendente ( {{ filter['page']-1 }} )</button>
 </form>
 {% endif %}
 {% if manga_data %}
@@ -88,9 +89,10 @@ Home
     <input type="hidden" name="artist" value="{{ filter['artist'] }}">
     <input type="hidden" name="year" value="{{ filter['year'] }}">
     <input type="hidden" name="page" value="{{ filter['page']+1 }}">
-    <button type="submit">pagina successiva ( {{ filter['page']+1 }} )</button>
+    <button type="submit" class="btn btn-warning"  style="margin-top: 5px;">pagina successiva ( {{ filter['page']+1 }} )</button>
 </form>
 {% endif %}
 {% endif %}
+</center>
 </center>
 {% endblock %}
