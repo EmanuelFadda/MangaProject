@@ -61,6 +61,9 @@ def index():
 
 @app.route('/manga/<int:id>')
 def manga_details(id):
+    esiste=False
+    if session.get("user_id") != None:
+        esiste=script.is_favorite(session['user_id'],id)
     manga = script.get_manga_by_list_id((id,))[0]
     id_manga = manga[0]
 
@@ -71,9 +74,9 @@ def manga_details(id):
     comments = script.get_comments_by_manga_id(id)
 
     if manga:
-        return render_template('manga.html', genres=script.get_all_genres(), people=script.get_all_person(), manga=manga, chapters=chapters, comments=comments, user=user_session)
+        return render_template('manga.html', genres=script.get_all_genres(), people=script.get_all_person(), manga=manga, chapters=chapters, comments=comments, user=user_session,preferito=esiste)
     else:
-        return render_template('error.html', genres=script.get_all_genres(), people=script.get_all_person(), message='Manga not found', user=user_session)
+        return render_template('error.html', genres=script.get_all_genres(), people=script.get_all_person(), message='Manga not found', user=user_session,preferito=esiste)
 
 
 @app.route('/account/<id_account>')
@@ -104,7 +107,11 @@ def profile(id_account):
 
 @app.route('/manga/<int:idm>/capitolo/<int:nc>')
 def capitolo(idm, nc):
-
+    if session.get("user_id") != None:
+        idu=session["user_id"]
+        letto=script.is_read(idu,idm)
+        if letto==False:
+            script.add_read(idu,idm)
     # richiesta capitoli dal database
 
     chapters = script.get_chapters_by_manga_id(idm)
@@ -215,6 +222,18 @@ def elimina_commento(idm):
         script.delete_comment(idc)
 
     return redirect(url_for('manga_details', id=idm))
+
+@app.route('/actionfavorite/<int:idm>',methods=['GET', 'POST'])
+def azione_preferiti(idm):
+    if request.method=="POST":
+        idu=session["user_id"]
+        esiste=script.is_favorite(idu,idm)
+        if esiste:
+            script.delete_favorite(idu,idm)  
+        else:
+            script.add_favorite(idu,idm)   
+    return redirect(url_for('manga_details', id=idm))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

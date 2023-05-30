@@ -172,7 +172,6 @@ def get_viewed_manga(id):
             join letto on manga.ID=letto.ID_manga
             join utente on letto.ID_utente=utente.ID
             """+where
-    print(query)
     cur.execute(query)
     manga = cur.fetchall()
     return manga
@@ -209,6 +208,7 @@ def control_login(email, password):
 
     cur.execute(query)
     result = cur.fetchone()
+    
     # al momento si mette false per indicare che il seguente utente non è admin,
     # al completamento del database verrà modificata la funzione
     print(result)
@@ -270,4 +270,53 @@ def delete_comment(idcommento):
             DELETE FROM commento WHERE ID=%s
             """
     cur.execute(query,(idcommento,))
+    mysql.connection.commit()
+
+def is_favorite(idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            SELECT * FROM preferiti WHERE ID_Utente=%s AND ID_Manga=%s
+            """
+    cur.execute(query,(idutente,idmanga))
+    result=cur.fetchone()
+    if result is None:
+        return False
+    else:
+        return True
+    
+def add_favorite(idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            INSERT INTO preferiti(ID_Utente,ID_Manga) VALUES (%s ,%s)
+            """
+    cur.execute(query,(idutente,idmanga))
+    mysql.connection.commit()
+
+
+def delete_favorite(idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            DELETE FROM preferiti WHERE ID_Utente=%s AND ID_Manga=%s
+            """
+    cur.execute(query,(idutente,idmanga))
+    mysql.connection.commit()
+
+def is_read(idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            SELECT * FROM letto WHERE ID_Utente=%s AND ID_Manga=%s
+            """
+    cur.execute(query,(idutente,idmanga))
+    result=cur.fetchone()
+    if result is None:
+        return False
+    else:
+        return True
+    
+def add_read(idutente,idmanga):
+    cur = mysql.connection.cursor()
+    query = """
+            INSERT INTO letto(ID_Utente,ID_Manga) VALUES (%s ,%s)
+            """
+    cur.execute(query,(idutente,idmanga))
     mysql.connection.commit()

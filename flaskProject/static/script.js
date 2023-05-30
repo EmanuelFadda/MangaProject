@@ -1,11 +1,4 @@
-function toggleFavorite() {
-  var button = document.getElementById("favorite-button");
-  if (button.innerHTML.includes("★")) {
-    button.innerHTML = "☆ Preferiti";
-  } else {
-    button.innerHTML = "★ Preferiti";
-  }
-}
+
 // Iterate through each summary
 var summaries = document.querySelectorAll('.summary');
 
