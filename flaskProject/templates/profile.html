@@ -12,13 +12,8 @@
 <div>
     <div class="container">
         <div class="container my-5">
-            <div class="row text-center">
-                <div class="col-5">
-                    <div class="container">
-                        <img src="" alt="immagine profilo">
-                    </div>
-                </div>
-                <div class="col-7">
+            <div class="text-center">
+                <div class="container">
                     <div class="row">
                         <div class="container">
                             <div class="row">
@@ -46,19 +41,21 @@
             </div>
         </div>
         {% if user['user_id'] %}
-            {% if user['user_id']!=utente.ID|string %}
-            <center>
-                <form method="POST"  action="/actionfollower/{{ utente.ID }}">
+        {% if user['user_id']!=utente.ID|string %}
+        <center>
+            <form method="POST" action="/actionfollower/{{ utente.ID }}">
                 {% if segue %}
-                <button type="submit" class="btn btn-warning" id="favorite-button"  style="margin-top: 5px;"> Rimuovi dai Seguiti</button>
-                
+                <button type="submit" class="btn btn-warning" id="favorite-button" style="margin-top: 5px;"> Rimuovi dai
+                    Seguiti</button>
+
                 {% else %}
-                <button type="submit" class="btn btn-warning" id="favorite-button"  style="margin-top: 5px; background-color: rgb(248, 248, 176);"> Segui
-                    </button>
+                <button type="submit" class="btn btn-warning" id="favorite-button"
+                    style="margin-top: 5px; background-color: rgb(248, 248, 176);"> Segui
+                </button>
                 {% endif %}
-                </form>
-            </center>
-            {% endif %}
+            </form>
+        </center>
+        {% endif %}
         {% endif %}
         <div>
             <div class="container">
@@ -93,12 +90,14 @@
         </div>
         <center>
             <h3>SEGUE</h3>
-               {% for seguito in seguiti %}
-               <a href="/account/{{ seguito[0] }}"><h3>{{ seguito[1] }}#{{ seguito[0] }}</h3></a>
-               {% endfor %}
+            {% for seguito in seguiti %}
+            <a href="/account/{{ seguito[0] }}">
+                <h3>{{ seguito[1] }}#{{ seguito[0] }}</h3>
+            </a>
+            {% endfor %}
             </form>
         </center>
-        
+
     </div>
 </div>
 </div>
